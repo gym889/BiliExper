@@ -10,11 +10,11 @@
     "default": {
         "vip_task": {   // 任务:自动领取大会员B币劵优惠券，花费剩余B币劵，下面为本功能详细配置
             "enable": false, //任务开关，值为true或false分别代表开启和关闭
-            "receiveDay": 1, // 尝试获取B币劵优惠券的日期，值为整数，1为当月第1天
+            "receiveDay": 2, // 尝试获取B币劵优惠券的日期，值为整数，1为当月第1天
             "BpCharge": {     // 设置花费B币劵的方式，兑换顺序为下方配置顺序，可以删除或更换顺序，若某项兑换失败顺延到下一项继续兑换直到最后一项或劵花费完毕
-                "charge": 5,     // 值为整数，给自己充电，花费劵的数量为5
+                "charge": 0,     // 值为整数，给自己充电，花费劵的数量为0
                 "Bp2Gold": 0,    // 值为整数，兑换金瓜子，花费劵的数量为0
-                "Bp2Coupons": 0  // 值为整数，兑换漫读劵，花费劵的数量为0
+                "Bp2Coupons": 5  // 值为整数，兑换漫读劵，花费劵的数量为5
             },
             "chargeDay": 0   // 尝试花费B币劵的日期，0为当月最后1天
         },
@@ -22,8 +22,8 @@
         "xliveSign_task": true,    // 任务:直播签到，值为true或false分别代表开启和关闭
         "xlive_bag_send_task": {   // 任务:送出即将到期的直播间背包里的礼物，值为true或false分别代表开启和关闭，下面为本功能详细配置
             "enable": true,       //任务开关，值为true或false分别代表开启和关闭
-            "room_id": 1535258,         // 值为整数，送礼物的直播间，0为随机取直播间
-            "expire": 172800      // 值为整数，距离过期的时间(单位为秒),172800为两天，若礼物将在这个时间内过期则会被随机送出
+            "room_id": 0,         // 值为整数，送礼物的直播间，0为随机取直播间
+            "expire": 86400      // 值为整数，距离过期的时间(单位为秒),172800为两天，若礼物将在这个时间内过期则会被随机送出
         },
         "xlive_heartbeat_task": {     // 任务:发送直播心跳，可用于获得小心心(每5分钟1个)和大老爷在线时长加经验(费时，不建议在云函数使用)
             "enable": true,           // 任务开关，值为true或false分别代表开启和关闭
@@ -34,7 +34,7 @@
             "timeout": 16,            // 心跳分钟数，值为数字(单位分钟,允许小数),心跳的时间，达到时间退出
         },
         "xlive_anchor_task": {   // 任务:参与直播天选时刻，下面为本功能详细配置
-            "enable": true,          //任务开关，值为true或false分别代表开启和关闭
+            "enable": false,          //任务开关，值为true或false分别代表开启和关闭
             "anchor_type": [[0, 0], [1, 0]], //参与条件，值为n*2维整数数组，详见下方
                                              /*
                                              [0, 0] 无  [1, 0] 关注主播
@@ -65,11 +65,11 @@
             "run_once": true    //参与一次即退出，值为true或false，值为false才会等待超时退出(Actions上默认)，云函数上推荐设置为true并每隔10分钟调用此功能
         },
         "coin_task": {           // 任务:每日投币获取经验，下面为本功能详细配置
-            "enable": false,      // 任务开关，值为true或false分别代表开启和关闭
-            "num": 5,            // 投币数量，值为整数(范围0-5)，如果当天已经投币超过这个数量则不会继续投币否则补齐剩余数量，硬币不够则不会投币
+            "enable": true,      // 任务开关，值为true或false分别代表开启和关闭
+            "num": 1,            // 投币数量，值为整数(范围0-5)，如果当天已经投币超过这个数量则不会继续投币否则补齐剩余数量，硬币不够则不会投币
             "target_exp": 28800, // 目标经验值，值为整数，达到经验目标则停止投币
             "delay": [0, 2],  // 延时，值为二维整数数组，模板意思是每次投币后随机延时0-2秒进行下一次投币
-            "do_task": [1],   // 投币模式，值为整数数组，按照数字顺序执行不同投币模式
+            "do_task": [2,1,3],   // 投币模式，值为整数数组，按照数字顺序执行不同投币模式
        /*
            模式1:随机抽取视频投币
            模式2:从账号的关注列表或下面up参数获取up主，对up主视频(专栏)投币
@@ -149,8 +149,8 @@
         },
         "manga_sign_task": true,  // 任务:漫画app签到
         "exchangeCoupons_task": { // 任务:漫画积分兑换福利券，请保证程序在中午12点0分30秒左右启动，其他时候启动本功能几乎都会兑换失败
-            "enable": false,      // 任务开关，值为true或false分别代表开启和关闭
-            "num": 0              // 兑换数量，值为整数
+            "enable": true,      // 任务开关，值为true或false分别代表开启和关闭
+            "num": 2              // 兑换数量，值为整数
         },
         "manga_vip_reward_task": {// 任务:领取每月大会员漫画权益(漫读劵)
             "enable": true,       // 任务开关，值为true或false分别代表开启和关闭
@@ -162,7 +162,7 @@
             "filter": "25900|1-30,35,55;25966|5,15,35-" //过滤漫画参数，值为字符串，格式为"漫画mc号1|章节序号1,章节序号2;漫画mc号2|章节序号1,章节序号2"这样的格式指定要购买的漫画
         },
         "judgement_task": {      //  任务:风纪委员投票
-            "enable": true,      //  任务开关，值为true或false分别代表开启和关闭
+            "enable": false,      //  任务开关，值为true或false分别代表开启和关闭
             "run_once": true,   //没有案件立即退出，值为true或false，值为false才会等待超时退出(Actions上默认)，云函数上推荐设置为true并每隔30分钟调用此功能
             "params": {      // 默认投票参数，vote值程序会自动使用从众法填写，注意此项下面的可选子参数的值不止vote和attr两个，其他参数请看项目的说明文件(其他参数均为非必须参数可以不需要)
                 "vote": 4,   // 投票类型，值为整数，4为投删除票，其他取值看项目说明文件，非必须参数此行可以删除但不建议
@@ -192,7 +192,7 @@
         /*  "email": "",
             "telegram_bot_token": "",
             "telegram_bot_chatid": "",
-            "SKEY": "SCT9483T3d5NZps5AVvTYIn1ipyouWNI" */
+            "SKEY": "SCT145132TU7gS2CTKI599CeLRD6fYHijh" */
         },
         "hooks": [ // 在这里以数组的形式定义所有消息推送回调接口
         	{
@@ -200,20 +200,20 @@
                 "name": "server酱Turbo版消息推送", // webhook名称，仅用于日志显示不用于实际消息推送
                 "msg_separ": "\n\n",       // 消息分隔符，推送消息时将每一条消息用两个换行符(\n)隔开
                 "method": 1,               // 请求方式,0为get,1为post,3为以json方式post
-                "url": "https://sctapi.ftqq.com/{SendKey}.send", // 请求地址,{SendKey}为对上面variable变量中的SendKey的引用，当然也可以直接把SCKEY的值放在url里面
+                "url": "https://sctapi.ftqq.com/{SCT145132TU7gS2CTKI599CeLRD6fYHijh}.send", // 请求地址,{SendKey}为对上面variable变量中的SendKey的引用，当然也可以直接把SCKEY的值放在url里面
                 "params": {                                // 请求参数,server酱推送需要text和desp两个参数，分别把变量里title和msg_simple(简化消息)赋值进去
-                    "text": "{title}",
+                    "text": "{BiliExper}",
                     "desp": "{msg_simple}" 
                 }
             }/*,
             {
-                "enable": true,
+                "enable": false,
                 "name": "server酱消息推送",
                 "msg_separ": "\n\n",
                 "method": 1,
-                "url": "https://sc.ftqq.com/{SCKEY}.send",
+                "url": "https://sc.ftqq.com/{SCT145132TU7gS2CTKI599CeLRD6fYHijh}.send",
                 "params": {
-                    "text": "{title}",
+                    "text": "{BiliExper}",
                     "desp": "{msg_simple}" 
                 }
             }, //若要实现其他消息推送接口，需要自己查阅相关文档构建method，url和params三个参数，下面是邮箱推送和telegram_bot推送的例子，其他平台自行探索
@@ -253,14 +253,14 @@
     "log_file": "BiliExp.log",   // 输出日志文件，不输出请留空，也可填写完整路径
     "log_console": true,         // 是否把日志输出到控制台
     "looping": 0,         // 循环间隔，单位为秒，设置为0则不启用，也可以使用命令行启用（命令行优先），可运行命令 python3 BiliExp.py -h 查看，与timing互斥
-    "timing": [],          // 定时执行，格式为HH:mm:ss，空列表则不启用，也可以使用命令行启用（命令行优先），可运行命令 python3 BiliExp.py -h 查看，与looping互斥
+    "timing": [12:00:30],          // 定时执行，格式为HH:mm:ss，空列表则不启用，也可以使用命令行启用（命令行优先），可运行命令 python3 BiliExp.py -h 查看，与looping互斥
     "random": 0,          // 随机延时范围，单位为秒，设置为0不启用，也可以使用命令行启用（命令行优先），可运行命令 python3 BiliExp.py -h 查看
     "users": [{                 //账户数组，每个账户包含一个cookieDatas和tasks参数，使用actions的用户可以使用secrets(biliconfig)指定cookie而不用本参数
         "cookieDatas": {        // cookie获取方式见项目说明
-            "SESSDATA": "xxxxx",
-            "bili_jct": "xxxxx",
-            "DedeUserID": "xxxxx",
-            "LIVE_BUVID": "xxxxx"
+            "SESSDATA": "a4060220%2C1667365956%2Cab4d1%2A51",
+            "bili_jct": "6b1a235e2f5659340d744589ae92ef51",
+            "DedeUserID": "16218438",
+            "LIVE_BUVID": "AUTO9516322278421707"
         },
         "show_name": "", /* 昵称，用于日志，消息推送，填空则默认使用账号昵称，在actions上不想显示真实昵称时使用
         /* 下面tasks参数与最上面default参数作用相同，但优先级更高，用于定制每个账号的参数，
@@ -271,7 +271,7 @@
         "cookieDatas": {
             "SESSDATA": "4a5f1c63%2C1785313721%2Cdf9fc*a1",
             "bili_jct": "cf28ba45824d443646907a5c4da8cf1",
-            "DedeUserID": "914624742",
+            "DedeUserID": "16218438",
             "LIVE_BUVID": "xxxxx"
         },
         "show_name": "账号2",
